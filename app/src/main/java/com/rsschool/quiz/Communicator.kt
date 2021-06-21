@@ -6,4 +6,6 @@ interface Communicator {
     fun previousButton(quizStep: Int, answers: ArrayList<Int>)
 
     fun submitButton(answers: ArrayList<Int>)
+
+    fun backButton(answers: ArrayList<Int>)
 }

@@ -9,17 +9,12 @@ class MainActivity : AppCompatActivity(), Communicator {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val quizStep = 1
-        val question = "My question"
-        val questionOptions = arrayListOf("First option", "Second option", "Third question", "Four question", "Fifth question")
         val answers = arrayListOf(0, 0, 0, 0, 0)
-        openQuizFragment(quizStep, question, questionOptions, answers)
+        openQuizFragment(quizStep, answers)
     }
 
-    private fun openQuizFragment(quizStep: Int,
-                                 question: String,
-                                 questionOptions: ArrayList<String>,
-                                 answers: ArrayList<Int>) {
-        val quizFragment: Fragment = QuizFragment.newInstance(quizStep, question, questionOptions, answers)
+    private fun openQuizFragment(quizStep: Int, answers: ArrayList<Int>) {
+        val quizFragment: Fragment = QuizFragment.newInstance(quizStep, answers)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, quizFragment)
         transaction.commit()
@@ -33,17 +28,19 @@ class MainActivity : AppCompatActivity(), Communicator {
     }
 
     override fun nextButton(quizStep: Int, answers: ArrayList<Int>) {
-        val question = "My question"
-        val questionOptions = arrayListOf("First Option", "Second Option", "Third Option", "Four Option", "Fifth Option")
-        openQuizFragment(quizStep + 1, question, questionOptions, answers)
+        openQuizFragment(quizStep + 1, answers)
     }
 
     override fun previousButton(quizStep: Int, answers: ArrayList<Int>) {
-        val question = "My question"
-        val questionOptions = arrayListOf("First Option", "Second Option", "Third Option", "Four Option", "Fifth Option")
-        openQuizFragment(quizStep - 1, question, questionOptions, answers)
+        openQuizFragment(quizStep - 1, answers)
     }
 
     override fun submitButton(answers: ArrayList<Int>) {
         openResultFragment(answers)
-    }}
+    }
+
+    override fun backButton(answers: ArrayList<Int>) {
+        val quizStep = 1
+        openQuizFragment(quizStep, answers)
+    }
+}

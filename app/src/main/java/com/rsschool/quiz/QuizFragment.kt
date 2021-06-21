@@ -10,53 +10,20 @@ import com.rsschool.quiz.databinding.FragmentQuizBinding
 
 class QuizFragment : Fragment() {
 
-    private val questions = arrayListOf<String>(
-        "Text of question 1",
-        "Text of question 2",
-        "Text of question 3",
-        "Text of question 4",
-        "Text of question 5",
-    )
+    private val questions = DataProvider().questions
+    private val questionOptions = DataProvider().questionOptions
 
-    private val questionOptions = arrayListOf<String>(
-        "Question 1 Option 1",
-        "Question 1 Option 2",
-        "Question 1 Option 3",
-        "Question 1 Option 4",
-        "Question 1 Option 5",
-        "Question 2 Option 1",
-        "Question 2 Option 2",
-        "Question 2 Option 3",
-        "Question 2 Option 4",
-        "Question 2 Option 5",
-        "Question 3 Option 1",
-        "Question 3 Option 2",
-        "Question 3 Option 3",
-        "Question 3 Option 4",
-        "Question 3 Option 5",
-        "Question 4 Option 1",
-        "Question 4 Option 2",
-        "Question 4 Option 3",
-        "Question 4 Option 4",
-        "Question 4 Option 5",
-        "Question 5 Option 1",
-        "Question 5 Option 2",
-        "Question 5 Option 3",
-        "Question 5 Option 4",
-        "Question 5 Option 5"
-        )
     private var _binding: FragmentQuizBinding? = null
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var communicator: Communicator
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val quizStep = arguments?.getInt(QUIZ_STEP_KEY)
+        setThemeStyle(quizStep!!, inflater)
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
         val view = binding.root
         communicator = activity as Communicator
@@ -66,8 +33,6 @@ class QuizFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //val question = arguments?.getString(QUESTION_KEY)
-        //val questionOptions = arguments?.getStringArrayList(QUESTION_OPTIONS_KEY)
         val quizStep = arguments?.getInt(QUIZ_STEP_KEY)
         val answers = arguments?.getIntegerArrayList(ANSWERS_KEY)
 
@@ -112,8 +77,17 @@ class QuizFragment : Fragment() {
             if (quizStep == 1) {
                 binding.previousButton.isClickable = false
                 binding.previousButton.isEnabled = false
+                binding.toolbar.navigationIcon = null
             } else {
-                binding.previousButton.setOnClickListener{
+                binding.previousButton.setOnClickListener {
+                    if (quizStep != null && answers != null) {
+                        answers[quizStep - 1] = getCheckedOption()
+                        println("Question $quizStep, answers $answers")
+                        communicator.previousButton(quizStep, answers)
+                    }
+                }
+
+                binding.toolbar.setNavigationOnClickListener {
                     if (quizStep != null && answers != null) {
                         answers[quizStep - 1] = getCheckedOption()
                         println("Question $quizStep, answers $answers")
@@ -175,6 +149,25 @@ class QuizFragment : Fragment() {
         return isChecked
     }
 
+    private  fun setThemeStyle(quizStep: Int, inflater: LayoutInflater) {
+        when (quizStep) {
+            1 -> {
+                inflater.context.setTheme(R.style.Theme1)
+            }
+            2 -> {
+                inflater.context.setTheme(R.style.Theme2)
+            }
+            3 -> {
+                inflater.context.setTheme(R.style.Theme3)
+            }
+            4 -> {
+                inflater.context.setTheme(R.style.Theme4)
+            }
+            5 -> {
+                inflater.context.setTheme(R.style.Theme5)
+            }
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -182,26 +175,16 @@ class QuizFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(
-            quizStep: Int,
-            question: String,
-            questionOptions: ArrayList<String>,
-            answers: ArrayList<Int>
-        ): QuizFragment {
+        fun newInstance(quizStep: Int, answers: ArrayList<Int>): QuizFragment {
             val fragment = QuizFragment()
             val args = Bundle()
             args.putInt(QUIZ_STEP_KEY, quizStep)
             args.putIntegerArrayList(ANSWERS_KEY, answers)
-            args.putString(QUESTION_KEY, question)
-            args.putStringArrayList(QUESTION_OPTIONS_KEY, questionOptions)
             fragment.arguments = args
             return fragment
         }
 
-
         private const val ANSWERS_KEY = "ANSWERS"
         private const val QUIZ_STEP_KEY = "QUIZ_STEP"
-        private const val QUESTION_KEY = "QUESTION"
-        private const val QUESTION_OPTIONS_KEY = "QUESTION_OPTIONS"
     }
 }
