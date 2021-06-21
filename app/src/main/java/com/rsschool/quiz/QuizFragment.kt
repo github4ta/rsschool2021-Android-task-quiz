@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import com.rsschool.quiz.databinding.FragmentQuizBinding
 
@@ -27,6 +28,10 @@ class QuizFragment : Fragment() {
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
         val view = binding.root
         communicator = activity as Communicator
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            // Handle the back button event
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(callback)
         return view
     }
 
@@ -52,11 +57,31 @@ class QuizFragment : Fragment() {
                 val checkedId = answers[index]
                 if (checkedId != 0) {
                     setCheckedOption(checkedId)
+                    binding.nextButton.isClickable = true
+                    binding.nextButton.isEnabled = true
+                    if (quizStep == 5) {
+                        binding.nextButton.text = "Submit"
+                        binding.nextButton.setOnClickListener {
+                            if (quizStep != null && answers != null) {
+                                answers[quizStep - 1] = getCheckedOption()
+                                println("Question $quizStep, answers $answers")
+                                communicator.submitButton(answers)
+                            }
+                        }
+                    } else {
+                        binding.nextButton.setOnClickListener {
+                            if (quizStep != null && answers != null) {
+                                answers[quizStep - 1] = getCheckedOption()
+                                println("Question $quizStep, answers $answers")
+                                communicator.nextButton(quizStep, answers)
+                            }
+                        }
+                    }
+                } else {
+                    binding.nextButton.isClickable = false
+                    binding.nextButton.isEnabled = false
                 }
             }
-
-            binding.nextButton.isClickable = false
-            binding.nextButton.isEnabled = false
 
             binding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
                 binding.nextButton.isClickable = true
