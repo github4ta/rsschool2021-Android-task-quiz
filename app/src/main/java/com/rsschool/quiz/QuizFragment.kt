@@ -38,7 +38,7 @@ class QuizFragment : Fragment() {
 
         binding.toolbar.title = "QUESTION $quizStep"
         if (quizStep != null) {
-            val index = quizStep -1
+            val index = quizStep - 1
             binding.question.text = questions?.get(index)
 
             val optionShift = 5 * index
@@ -55,24 +55,33 @@ class QuizFragment : Fragment() {
                 }
             }
 
-            if (quizStep == 5) {
-                binding.nextButton.text = "Submit"
-                binding.nextButton.setOnClickListener{
-                    if (quizStep != null && answers != null) {
-                        answers[quizStep - 1] = getCheckedOption()
-                        println("Question $quizStep, answers $answers")
-                        communicator.submitButton(answers)
+            binding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
+                if (checkedId != -1) {
+                    if (quizStep == 5) {
+                        binding.nextButton.text = "Submit"
+                        binding.nextButton.setOnClickListener {
+                            if (quizStep != null && answers != null) {
+                                answers[quizStep - 1] = getCheckedOption()
+                                println("Question $quizStep, answers $answers")
+                                communicator.submitButton(answers)
+                            }
+                        }
+                    } else {
+                        binding.nextButton.setOnClickListener {
+                            if (quizStep != null && answers != null) {
+                                answers[quizStep - 1] = getCheckedOption()
+                                println("Question $quizStep, answers $answers")
+                                communicator.nextButton(quizStep, answers)
+                            }
+                        }
                     }
-                }
-            } else {
-                binding.nextButton.setOnClickListener{
-                    if (quizStep != null && answers != null) {
-                        answers[quizStep - 1] = getCheckedOption()
-                        println("Question $quizStep, answers $answers")
-                        communicator.nextButton(quizStep, answers)
-                    }
+                } else {
+                    binding.nextButton.isClickable = false
+                    binding.nextButton.isEnabled = false
                 }
             }
+
+
 
             if (quizStep == 1) {
                 binding.previousButton.isClickable = false
@@ -149,7 +158,7 @@ class QuizFragment : Fragment() {
         return isChecked
     }
 
-    private  fun setThemeStyle(quizStep: Int, inflater: LayoutInflater) {
+    private fun setThemeStyle(quizStep: Int, inflater: LayoutInflater) {
         when (quizStep) {
             1 -> {
                 inflater.context.setTheme(R.style.Theme1)
@@ -168,6 +177,7 @@ class QuizFragment : Fragment() {
             }
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
