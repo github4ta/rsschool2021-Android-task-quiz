@@ -55,29 +55,29 @@ class QuizFragment : Fragment() {
                 }
             }
 
+            binding.nextButton.isClickable = false
+            binding.nextButton.isEnabled = false
+
             binding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
-                if (checkedId != -1) {
-                    if (quizStep == 5) {
-                        binding.nextButton.text = "Submit"
-                        binding.nextButton.setOnClickListener {
-                            if (quizStep != null && answers != null) {
-                                answers[quizStep - 1] = getCheckedOption()
-                                println("Question $quizStep, answers $answers")
-                                communicator.submitButton(answers)
-                            }
-                        }
-                    } else {
-                        binding.nextButton.setOnClickListener {
-                            if (quizStep != null && answers != null) {
-                                answers[quizStep - 1] = getCheckedOption()
-                                println("Question $quizStep, answers $answers")
-                                communicator.nextButton(quizStep, answers)
-                            }
+                binding.nextButton.isClickable = true
+                binding.nextButton.isEnabled = true
+                if (quizStep == 5) {
+                    binding.nextButton.text = "Submit"
+                    binding.nextButton.setOnClickListener {
+                        if (quizStep != null && answers != null) {
+                            answers[quizStep - 1] = getCheckedOption()
+                            println("Question $quizStep, answers $answers")
+                            communicator.submitButton(answers)
                         }
                     }
                 } else {
-                    binding.nextButton.isClickable = false
-                    binding.nextButton.isEnabled = false
+                    binding.nextButton.setOnClickListener {
+                        if (quizStep != null && answers != null) {
+                            answers[quizStep - 1] = getCheckedOption()
+                            println("Question $quizStep, answers $answers")
+                            communicator.nextButton(quizStep, answers)
+                        }
+                    }
                 }
             }
 
