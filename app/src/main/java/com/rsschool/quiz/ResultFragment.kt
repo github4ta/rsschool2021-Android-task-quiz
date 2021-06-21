@@ -81,8 +81,9 @@ class ResultFragment : Fragment() {
         val extraText = StringBuilder()
         extraText.append("Your result: $result%\n\n")
         for (i in 1..5) {
+            val index = 5 * (i - 1) + answers[i - 1] - 1
             extraText.append("$i) ${DataProvider().questions[i - 1]}\n")
-            extraText.append("Your answer: ${DataProvider().questionOptions[answers[i - 1]]}\n\n")
+            extraText.append("Your answer: ${DataProvider().questionOptions[index]}\n\n")
         }
         return extraText.toString()
     }
