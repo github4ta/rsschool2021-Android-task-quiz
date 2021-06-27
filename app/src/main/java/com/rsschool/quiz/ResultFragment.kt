@@ -43,7 +43,7 @@ class ResultFragment : Fragment() {
 
         var result = 0
         for (i in 0..4) {
-          if (answers?.get(i) == expectedAnswers[i])  {
+          if (answers[i] == expectedAnswers[i])  {
               result += 20
           }
         }
@@ -51,12 +51,12 @@ class ResultFragment : Fragment() {
         binding.txtResult.text = "Your result: $result%"
 
         binding.btnBack.setOnClickListener {
-            communicator.backButton(arrayListOf(0, 0, 0, 0, 0))
+            communicator.backButton()
         }
 
         binding.btnExit.setOnClickListener {
-            activity?.finish();
-            exitProcess(0);
+            activity?.finish()
+            exitProcess(0)
         }
 
         binding.btnShare.setOnClickListener {

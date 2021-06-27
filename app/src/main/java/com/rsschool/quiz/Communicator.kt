@@ -7,5 +7,5 @@ interface Communicator {
 
     fun submitButton(answers: ArrayList<Int>)
 
-    fun backButton(answers: ArrayList<Int>)
+    fun backButton()
 }

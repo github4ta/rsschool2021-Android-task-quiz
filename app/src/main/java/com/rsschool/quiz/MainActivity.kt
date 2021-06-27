@@ -8,9 +8,9 @@ class MainActivity : AppCompatActivity(), Communicator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val quizStep = 1
-        val answers = arrayListOf(0, 0, 0, 0, 0)
-        openQuizFragment(quizStep, answers)
+
+        // Start Quiz with the first step and zeroed answers
+        openQuizFragment(1, arrayListOf(0, 0, 0, 0, 0))
     }
 
     private fun openQuizFragment(quizStep: Int, answers: ArrayList<Int>) {
@@ -28,19 +28,19 @@ class MainActivity : AppCompatActivity(), Communicator {
     }
 
     override fun nextButton(quizStep: Int, answers: ArrayList<Int>) {
-        openQuizFragment(quizStep + 1, answers)
+        openQuizFragment(quizStep.plus(1), answers)
     }
 
     override fun previousButton(quizStep: Int, answers: ArrayList<Int>) {
-        openQuizFragment(quizStep - 1, answers)
+        openQuizFragment(quizStep.minus(1), answers)
     }
 
     override fun submitButton(answers: ArrayList<Int>) {
         openResultFragment(answers)
     }
 
-    override fun backButton(answers: ArrayList<Int>) {
-        val quizStep = 1
-        openQuizFragment(quizStep, answers)
+    override fun backButton() {
+        // Start Quiz with the first step and zeroed answers
+        openQuizFragment(1, arrayListOf(0, 0, 0, 0, 0))
     }
 }

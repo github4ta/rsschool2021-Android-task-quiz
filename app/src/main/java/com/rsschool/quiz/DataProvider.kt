@@ -1,7 +1,7 @@
 package com.rsschool.quiz
 
 class DataProvider {
-    val questions = arrayListOf<String>(
+    val questions = arrayListOf(
         "To be, or not to be...",
         "Tallest skyscraper:",
         "The biggest animal:",
@@ -9,7 +9,7 @@ class DataProvider {
         "The Answer to the Ultimate Question of Life, the Universe, and Everything is:",
     )
 
-    val questionOptions = arrayListOf<String>(
+    val questionOptions = arrayListOf(
         "To be",
         "Not to be",
         "I don't know",
