@@ -85,7 +85,7 @@ class QuizFragment : Fragment() {
             binding.nextButton.isEnabled = true
             nextSubmitButtonOnClickListener(quizStep, answers)
         }
-//        nextSubmitButtonOnClickListener(quizStep, answers)
+        nextSubmitButtonOnClickListener(quizStep, answers)
     }
 
     private fun nextSubmitButtonOnClickListener(quizStep: Int, answers: ArrayList<Int>) {
