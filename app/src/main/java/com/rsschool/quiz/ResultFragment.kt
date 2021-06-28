@@ -25,14 +25,17 @@ class ResultFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        inflater.context.setTheme(R.style.Theme0)
+        inflater.context.setTheme(R.style.Theme1)
+
         _binding = FragmentResultBinding.inflate(inflater, container, false)
         val view = binding.root
         communicator = activity as Communicator
+
         val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
             // Handle the back button event
         }
         requireActivity().onBackPressedDispatcher.addCallback(callback)
+
         return view
     }
 
